@@ -10,7 +10,6 @@ sys.path.append(os.getcwd()) # Current working directory
 # Custom libraries
 import ImageProcessing as IP
 import FaceTracking as FT
-import FlightSim as FS
 
 # Access dictionaries from model
 with open('lookup.pkl', 'rb') as f:
@@ -79,11 +78,11 @@ def __main__():
         face = cv2.resize(frame, (w, h))
         face, info = FT.findFace(face)
         pError = FT.trackObject(info, w, pid, pError)
-        #print("Center", info[0], "Area", info[1]) # Move drone based on the 2nd value (area)
         cv2.imshow("Output", face)
 
     # Release resources
     cap.release()
     cv2.destroyAllWindows()
 
-__main__() 
+if __name__ == '__main__':
+    __main__()
