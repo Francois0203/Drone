@@ -6,10 +6,7 @@ import sys, os, time
 sys.path.append(os.getcwd())
 
 # Global variables
-w, h = 360, 240
 fbRangeFace = [6200, 6800]
-pid = [0.4, 0.4, 0] # Proportional, Integral, Derivative
-pError = 0
 
 def findFace(img):
     cascade_path = os.path.join("Resources", "haarcascades", "haarcascade_frontalface_default.xml")
@@ -40,7 +37,6 @@ def findFace(img):
     else:
         return img, [[0, 0], 0]
 
-#def trackObject(me, info, w, pid, pError):
 def trackObject(info, w, pid, pError):
     area = info[1]
     x, y = info[0]
@@ -64,17 +60,25 @@ def trackObject(info, w, pid, pError):
     #me.send_rc_control(0, fb, 0, speed)
     return error
 
-# Capture device
-cap = cv2.VideoCapture(0) # 0 if only 1 webcam, 1 if you have multiple webcams
-
-while True:
-    _, img = cap.read()
-    img = cv2.resize(img, (w, h))
-    img, info = findFace(img)
-    #pError = trackFace(me, info, w, pid, pError)
-    pError = trackObject(info, w, pid, pError)
-    print("Center", info[0], "Area", info[1]) # Move drone based on the 2nd value (area)
-    cv2.imshow("Output", img)
+def __main__():
+    # Variables
+    w, h = 360, 240
+    pid = [0.4, 0.4, 0] # Proportional, Integral, Derivative
+    pError = 0
     
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    # Capture device
+    cap = cv2.VideoCapture(0) # 0 if only 1 webcam, 1 if you have multiple webcams
+
+    while True:
+        _, img = cap.read()
+        img = cv2.resize(img, (w, h))
+        img, info = findFace(img)
+        pError = trackObject(info, w, pid, pError)
+        print("Center", info[0], "Area", info[1]) # Move drone based on the 2nd value (area)
+        cv2.imshow("Output", img)
+    
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+if __name__ == '__main__':
+    __main__()
