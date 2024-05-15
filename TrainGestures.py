@@ -19,14 +19,14 @@ from keras import models
 # Current working directory
 sys.path.append(os.getcwd())
 
-# Check number of GPU's available to train model
-print("Num GPU's available: ", len(tf.config.list_physical_devices('GPU')))
+# Custom libraries
+import ImageProcessing as IP
 
 lookup = dict() 
 reverselookup = dict()
 count = 0
 
-for j in os.listdir('Resources/leapGestRecog/00/'):
+for j in os.listdir('Resources/NiceHands/00/'):
     if not j.startswith('.'): # Ensure you aren't reading in hidden folders
         lookup[j] = count
         reverselookup[count] = j
@@ -36,27 +36,29 @@ x_data = []
 y_data = []
 datacount = 0 # Count the amount of images in the dataset
 
-# Loop over the ten top-level folders
-for i in range(0, 10): 
+# Loop over the 5 top-level folders
+for i in range(0, 5): 
     print("i-value: ", i)
 
-    for j in os.listdir('Resources/leapGestRecog/0' + str(i) + '/'):
+    for j in os.listdir('Resources/NiceHands/0' + str(i) + '/'):
         print("j-value: ", j)
 
         if not j.startswith('.'): # Again avoid hidden folders
             count = 0 # Count how many images are there per gesture type
 
-            for k in os.listdir('Resources/leapGestRecog/0' + str(i) + '/' + j + '/'): 
-                print('Resources/leapGestRecog/0' + str(i) + '/' + j + '/')
+            for k in os.listdir('Resources/NiceHands/0' + str(i) + '/' + j + '/'): 
+                print('Resources/NiceHands/0' + str(i) + '/' + j + '/')
 
-                img = Image.open('Resources/leapGestRecog/0' + str(i) + '/' + j + '/' + k).convert('L') # Read in and convert to greyscale
+                img = Image.open('Resources/NiceHands/0' + str(i) + '/' + j + '/' + k).convert('L') # Read in and convert to greyscale
                 img = img.resize((320, 120))
                 arr = np.array(img)
                 x_data.append(arr) 
                 count = count + 1
 
-            y_values = np.full((count, 1), lookup[j]) 
-            y_data.append(y_values)
+                y_values = np.full((count, 1), lookup[j]) 
+                y_values = y_values.reshape(-1)
+                y_data.append(lookup[j]) 
+
             datacount = datacount + count
 
 print("Number of Images: ", datacount)
@@ -67,12 +69,15 @@ y_data = y_data.reshape(datacount, 1) # Reshape to be the correct size
 
 # Display different types of images
 def display_image_types():
-    for i in range(0, 10):
+    for i in range(0, 3):
         plt.imshow(x_data[i*200, :, :])
         plt.title(reverselookup[y_data[i*200, 0]])
         plt.show()
 
-#display_image_types()
+display_image_types()
+
+num_classes = len(np.unique(y_data))
+print("Number of classes: ", num_classes)
 
 y_data = to_categorical(y_data)
 x_data = x_data.reshape((datacount, 120, 320, 1))
@@ -80,6 +85,17 @@ x_data /= 255
 
 x_train, x_further, y_train, y_further = train_test_split(x_data, y_data, test_size = 0.2)
 x_validate, x_test, y_validate, y_test = train_test_split(x_further, y_further, test_size = 0.5)
+
+# Check number of GPU's available to train model
+physical_devices = tf.config.list_physical_devices('GPU')
+print("Num GPU's available: ", len(tf.config.list_physical_devices('GPU')))
+print("Devices: ", physical_devices)
+
+# Train model using GPU
+try:
+    tf.config.experimental.set_memory_growth(physical_devices[1], True)
+except:
+    pass
 
 # Build neural network and classification system
 model = models.Sequential()
@@ -93,11 +109,40 @@ model.add(layers.Flatten())
 model.add(layers.Dense(128, activation = 'relu'))
 model.add(layers.Dense(10, activation = 'softmax'))
 
+model.add(layers.Dense(num_classes, activation = 'softmax'))
+
 model.compile(optimizer = 'rmsprop', loss = 'categorical_crossentropy', metrics = ['accuracy'])
-model.fit(x_train, y_train, epochs = 10, batch_size = 64, verbose = 1, validation_data = (x_validate, y_validate))
+
+# Plot Training History
+def plot_history(history):
+    plt.figure(figsize = (12, 4))
+
+    # Accuracy Plot
+    plt.subplot(1, 2, 1)
+    plt.plot(history.history['accuracy'], label = 'Training Accuracy')
+    plt.plot(history.history['val_accuracy'], label = 'Validation Accuracy')
+    plt.title('Training and Validation Accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend()
+
+    # Loss Plot
+    plt.subplot(1, 2, 2)
+    plt.plot(history.history['loss'], label='Training Loss')
+    plt.plot(history.history['val_loss'], label='Validation Loss')
+    plt.title('Training and Validation Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend()
+
+    plt.show()
+
+history = model.fit(x_train, y_train, epochs = 20, batch_size = 64, verbose = 1, validation_data = (x_validate, y_validate)) # epochs = 10, batch_size = 64
+
+plot_history(history)
 
 # Save the model for use in other scripts
-model.save('Resources/Models/gesture_recognition_LG.h5')
+model.save('Resources/Models/gesture_recognition_Test.h5')
 print("Model saved successfully")
 
 # Save dictionaries in pickle files

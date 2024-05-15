@@ -68,7 +68,6 @@ def __main__():
             print(f"Predicted gesture: {predicted_gesture}, Confidence: {score}%") 
 
         cv2.imshow('Webcam', frame) # Display webcam feed
-        #cv2.imshow('Edges', IP.canny_edge_detection(frame))
 
     # Release resources
     cap.release()
@@ -97,5 +96,7 @@ def test():
     # Print output
     print(f"Predicted gesture: {predicted_gesture}, Confidence: {score}%") 
 
-__main__() 
+if __name__ == '__main__':
+    __main__()
+
 #test()
