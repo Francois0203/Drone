@@ -146,7 +146,7 @@ history = model.fit(datagen.flow(x_train, y_train, batch_size = 32), epochs = 50
 plot_history(history)
 
 # Save the model for use in other scripts
-model.save('Resources/Models/gesture_recognition_Adam.h5')
+model.save('Resources/Models/adam.h5')
 print("Model saved successfully")
 
 # Save dictionaries in pickle files
@@ -160,6 +160,3 @@ with open('reverselookup.pkl', 'wb') as f:
 model.load_weights('Resources/Models/best_model_Adam.keras')
 loss, acc = model.evaluate(x_test, y_test, verbose = 1)
 print("Accuracy: " + str(acc))
-
-
-

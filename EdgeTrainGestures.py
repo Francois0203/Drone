@@ -115,10 +115,37 @@ model.add(layers.Dense(10, activation = 'softmax'))
 model.add(layers.Dense(num_classes, activation = 'softmax'))
 
 model.compile(optimizer = 'rmsprop', loss = 'categorical_crossentropy', metrics = ['accuracy'])
-model.fit(x_train, y_train, epochs = 20, batch_size = 64, verbose = 1, validation_data = (x_validate, y_validate)) # epochs = 10, batch_size = 64
+
+# Plot Training History
+def plot_history(history):
+    plt.figure(figsize = (12, 4))
+
+    # Accuracy Plot
+    plt.subplot(1, 2, 1)
+    plt.plot(history.history['accuracy'], label = 'Training Accuracy')
+    plt.plot(history.history['val_accuracy'], label = 'Validation Accuracy')
+    plt.title('Training and Validation Accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend()
+
+    # Loss Plot
+    plt.subplot(1, 2, 2)
+    plt.plot(history.history['loss'], label='Training Loss')
+    plt.plot(history.history['val_loss'], label='Validation Loss')
+    plt.title('Training and Validation Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend()
+
+    plt.show()
+
+history = model.fit(x_train, y_train, epochs = 20, batch_size = 64, verbose = 1, validation_data = (x_validate, y_validate)) # epochs = 10, batch_size = 64
+
+plot_history(history)
 
 # Save the model for use in other scripts
-model.save('Resources/Models/gesture_recognition_Edges.h5')
+model.save('Resources/Models/edges.h5')
 print("Model saved successfully")
 
 # Save dictionaries in pickle files

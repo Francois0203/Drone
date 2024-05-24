@@ -17,7 +17,7 @@ with open('reverselookup.pkl', 'rb') as f:
     reverselookup = pickle.load(f)
 
 # Load pre-trained model
-model = load_model('Resources/Models/gesture_recognition_Edges.h5')
+model = load_model('Resources/Models/processed.h5')
 print("Successfully loaded model")
 
 # Predict the gesture name of the image using the model
@@ -74,7 +74,7 @@ def __main__():
     cv2.destroyAllWindows()
 
 def test():
-    image_path = "Resources/TestImages/test4.png"
+    image_path = "Resources/TestImages/test6.png"
     img = cv2.imread(image_path)
 
     # Predict image
@@ -82,7 +82,7 @@ def test():
     denoised, methods_used = IP.remove_noise(no_bg, 1)
     gray = IP.gray_scale(denoised)
     edges = IP.canny_edge_detection(gray)
-    image_data = IP.preprocess_image(edges)
+    image_data = IP.preprocess_image(gray)
 
     # Display images
     IP.display_image(img, 'Original')
@@ -96,7 +96,7 @@ def test():
     # Print output
     print(f"Predicted gesture: {predicted_gesture}, Confidence: {score}%") 
 
-if __name__ == '__main__':
-    __main__()
+# if __name__ == '__main__':
+#     __main__()
 
-#test()
+test()
