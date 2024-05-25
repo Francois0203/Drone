@@ -17,7 +17,7 @@ with open('reverselookup.pkl', 'rb') as f:
     reverselookup = pickle.load(f)
 
 # Load pre-trained model
-model = load_model('Resources/Models/processed.h5')
+model = load_model('Resources/Models/kaggle.h5')
 print("Successfully loaded model")
 
 # Predict the gesture name of the image using the model
