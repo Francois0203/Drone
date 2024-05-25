@@ -87,8 +87,8 @@ y_data = to_categorical(y_data)
 x_data = x_data.reshape((datacount, 120, 320, 1))
 x_data /= 255
 
-x_train, x_further, y_train, y_further = train_test_split(x_data, y_data, test_size = 0.2)
-x_validate, x_test, y_validate, y_test = train_test_split(x_further, y_further, test_size = 0.5)
+x_train, x_further, y_train, y_further = train_test_split(x_data, y_data, test_size = 0.3)
+x_validate, x_test, y_validate, y_test = train_test_split(x_further, y_further, test_size = 0.7)
 
 # Check number of GPU's available to train model
 physical_devices = tf.config.list_physical_devices('GPU')
