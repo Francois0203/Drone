@@ -9,9 +9,9 @@ This is the ITRI 616 (AI) assignment for semester 1 finall submitted date: 28 Ma
 
 ## Developers
 The Cloud Crusaders Team consist of the following developers which created the application.
-*	Francois Meiring (Team Leader)
-*	Michael Wakeford
-*	Etienne Berg
+*	Francois Meiring (Team Leader)  - 38276909
+*	Michael Wakeford  -  37569368
+*	Etienne Berg  -  37443445
 
 ## Installation
 
