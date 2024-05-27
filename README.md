@@ -9,16 +9,15 @@ This is the ITRI 616 (AI) assignment for semester 1 finall submitted date: 28 Ma
 
 ## Developers
 The Cloud Crusaders Team consist of the following developers which created the application.
-*	Francois Meiring (Team Leader)  - 38276909
-*	Michael Wakeford  -  37569368
-*	Etienne Berg  -  37443445
+*	Francois Meiring (Team Leader)  -   38276909
+*	Michael Wakeford    -    37569368
+*	Etienne Berg    -    37443445
 
 ## Installation
 
 System Requirements
 *	A computer with a webcam
 *	Python 3.12
-*	A compatible drone (optional)
 
 Dependencies
 The following listed dependencies are used to allow the operation ability of the program. Ensure you have the following Python packages installed. These dependencies are listed in the requiremtnts.txt file for automatic installation using this file.
@@ -45,10 +44,7 @@ Installation Steps
 
     
 ## Features
-This application utilises a live webcam feed to detect the user's face, determine its position relative to the camera, and send output commands to a drone to adjust its flight path accordingly. Additionally, it captures gestures and processes the images to identify the perceived gestures using a Convolutional Neural Network (CNN) developed from scratch. The output states the gesture and accuracy of the model to detect the gesture. 
-
-The prediction with future development can be used for controlling the drone or other interactive tasks.
-
+This application utilises a live webcam feed to detect the user's face. Additionally, it captures gestures and processes the images to identify the perceived gestures using a Convolutional Neural Network (CNN) developed from scratch. The output states the gesture and accuracy of the model to detect the gesture. 
 
 The Repo cosists of the following Python program scripts:
 
@@ -63,4 +59,22 @@ The Repo cosists of the following Python program scripts:
 *   TrainGestures.py
 *   Train_AdamOptimizer.py
 
+The **TrainGestures.py**, **Preprocess training.py**, and the **Train_AdamOptimizer.py** scripts build and develop the CNN on various frameworks with different approaches.
+
+The **ImageProcessing.py** script utilises image processing techniques and functions utilised in the various gesture detection functions on the various scripts, mainly in **IdentifyGestures.py** and utilised in the **FullDrone.py** script.
+
+
+The Repo includes the **Resources** folder containing the dataset utilised for the final CNN along with the **Trainin (Kaggle Dataset)** utilised in development of the CNN.
+
+The **lookup.pkl** and **reverselookup.pkl** files are used to store mappings between gesture category names and their corresponding numeric labels.
+
+## Contact Information
+
+For any questions or support, please contact:
+*	Cloud Crusaders: 38276909@mynwu.ac.za
+*	GitHub: https://github.com/Francois0203/Drone
+
+## Acknowledgements
+
+This project was developed as part of a group project at North-West University, under the guidance of Prof Absalom as the Cloud Crusaders. We thank him for his support and contributions.
 
